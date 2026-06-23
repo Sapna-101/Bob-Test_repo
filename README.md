@@ -1,405 +1,263 @@
-A simple, elegant tip calculator app built with SwiftUI following strict MVVM architecture.
+BookStore iOS App
 
-iOS Swift SwiftUI
+A modern, feature-rich iOS bookstore application built with SwiftUI, offering a seamless book browsing and shopping experience.
 
-📱 Features
+## 🎯 Overview
 
-Screen 1: Tip Calculator
+BookStore is a native iOS application that allows users to browse books, view detailed information, manage a shopping cart, and complete purchases. The app features a clean, intuitive interface with smooth animations and a responsive design.
 
-✅ Bill amount input with numeric keyboard
-✅ Segmented picker for tip percentage (10%, 15%, 20%, 25%)
-✅ Stepper for number of people (1-20)
-✅ Live calculation results:
-Tip amount
-Total amount
-Per person amount
-✅ Navigate to Split Summary
-✅ Reset functionality
-✅ Access to History
-Screen 2: Split Summary
+## ✨ Features
 
-✅ Full breakdown of calculation
-✅ Visual display with icons
-✅ Save to history option
-✅ Back to calculator navigation
-✅ Success alert on save
-Screen 3: History
+- **Browse Books**: View featured books and explore the complete catalog
+- **Search Functionality**: Search books by title or author
+- **Book Details**: View comprehensive information including ratings, reviews, and descriptions
+- **Shopping Cart**: Add books to cart with quantity selection
+- **Cart Management**: Update quantities, remove items, and view order summary
+- **Persistent Cart**: Cart data persists across app sessions using UserDefaults
+- **Order Checkout**: Complete purchases with tax calculation
+- **Responsive UI**: Adaptive layouts for different screen sizes
 
-✅ List of saved calculations
-✅ Swipe to delete individual items
-✅ Clear all option with confirmation
-✅ Empty state view
-✅ Detailed view for each calculation
-✅ Persistent storage with UserDefaults
-🏗️ Architecture
+## 🏗️ Architecture
 
-Strict MVVM Pattern
+The app follows the **MVVM (Model-View-ViewModel)** architecture pattern with SwiftUI's declarative approach.
 
-TipCalculator/
-├── TipCalculatorApp.swift          # App entry point
-│
-├── Models/                         # Data models
-│   └── TipCalculation.swift        # Calculation model with computed properties
-│
-├── ViewModels/                     # Business logic
-│   ├── TipCalculatorViewModel.swift # Calculator logic
-│   └── HistoryViewModel.swift      # History & persistence logic
-│
-└── Views/                          # UI layer
-    ├── TipCalculatorView.swift     # Main calculator screen
-    ├── SplitSummaryView.swift      # Summary screen
-    └── HistoryView.swift           # History screen
-📊 Data Model
+### Project Structure
 
-TipCalculation
+```
+BookStore/
+├── Models/
+│   ├── Book.swift              # Book data model with mock data
+│   └── CartItem.swift          # Shopping cart item model
+├── ViewModels/
+│   ├── BookViewModel.swift     # Manages book data and search
+- **Dependencies**: None (pure SwiftUI)
 
-struct TipCalculation: Identifiable, Codable {
-    let id: UUID
-    let billAmount: Double
-    let tipPercentage: Int
-    let numberOfPeople: Int
-    let date: Date
-    
-    // Computed properties
-    var tipAmount: Double
-    var totalAmount: Double
-    var perPersonAmount: Double
-    
-    // Formatted strings
-    var formattedBillAmount: String
-    var formattedTipAmount: String
-    var formattedTotalAmount: String
-    var formattedPerPersonAmount: String
-    var formattedDate: String
+## 📂 Project Structure
+
+```
+BookStore/
+├── BookStoreApp.swift          # App entry point
+├── Models/
+│   ├── Book.swift              # Book model with 10 mock books
+│   └── CartItem.swift          # Cart item model
+├── ViewModels/
+│   ├── BookViewModel.swift     # Books & search logic
+│   └── CartViewModel.swift     # Cart & checkout logic
+├── Views/
+│   ├── HomeView.swift          # Home screen
+│   ├── BookDetailView.swift    # Book details screen
+│   └── CartView.swift          # Shopping cart screen
+└── Extensions/
+    └── Color+Extensions.swift  # Hex color support
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Xcode 14.0 or later
+- macOS Ventura or later
+- iOS 16.0+ Simulator or Device
+
+### Installation
+
+1. **Create New Xcode Project**
+   - Open Xcode
+   - File → New → Project
+   - Choose "App" template
+   - Product Name: `BookStore`
+   - Interface: SwiftUI
+   - Language: Swift
+   - Minimum Deployment: iOS 16.0
+
+2. **Add Source Files**
+   - Copy all `.swift` files to your project
+   - Ensure all files are added to the target
+
+3. **Build and Run**
+   - Select a simulator or device
+   - Press `Cmd + R` to build and run
+
+## 📖 Mock Data
+
+The app includes 10 pre-configured books:
+
+### Featured Books (4)
+- Swift Programming Mastery (Technology)
+- The Midnight Garden (Fiction)
+- Quantum Physics Explained (Science)
+- Steve Jobs: The Visionary (Biography)
+
+### All Books (6 additional)
+- Ancient Civilizations (History)
+- Mindful Living (Self Help)
+- The Algorithm Designer (Technology)
+- Echoes of Tomorrow (Fiction)
+- The Art of Leadership (Self Help)
+- Climate Change: Our Future (Science)
+
+## 🎨 Design Features
+
+### Color Scheme
+- Each book has a unique cover color (10 distinct colors)
+- Blue accent color for prices and CTAs
+- System colors for text hierarchy
+
+### UI Components
+- **Featured Cards**: 160x240pt with overlay text
+- **Grid Cards**: Flexible 2-column layout
+- **Book Covers**: 200x280pt with shadow effects
+- **Cart Badge**: Red circle with item count
+- **Rating Stars**: 5-star visual rating system
+
+## 🛒 Shopping Cart Features
+
+### Cart Management
+- Add books with quantity selection (1-10)
+- Update quantities with +/- buttons
+- Swipe left to delete items
+- Automatic cart persistence
+
+### Order Summary
+- Subtotal calculation
+- 10% tax calculation
+- Total amount display
+- Formatted currency ($XX.XX)
+
+### Checkout Flow
+1. Review cart items
+2. View order summary
+3. Tap "Checkout" button
+4. See confirmation alert
+5. Cart automatically clears
+6. Return to browsing
+
+## 🔧 Technical Details
+
+### Data Persistence
+```swift
+// Cart data saved to UserDefaults
+private let cartKey = "bookstore_cart"
+
+// Automatic save on:
+- Add to cart
+- Update quantity
+- Remove item
+- Place order
+```
+
+### Search Implementation
+```swift
+// Real-time filtering
+var filteredBooks: [Book] {
+    if searchText.isEmpty {
+        return allBooks
+    } else {
+        return allBooks.filter { book in
+            book.title.localizedCaseInsensitiveContains(searchText) ||
+            book.author.localizedCaseInsensitiveContains(searchText)
+        }
+    }
 }
-🎯 ViewModels
+```
 
-TipCalculatorViewModel
+### Navigation Flow
+```
+HomeView (Root)
+├── BookDetailView (Push)
+└── CartView (Sheet/Push)
+```
 
-Responsibilities:
+## 📱 Screens
 
-Manage calculator input state
-Perform tip calculations
-Validate input
-Create calculation objects
-Published Properties:
+### 1. Home Screen
+- Large navigation title "BookStore"
+- Cart icon with badge (item count)
+- Search bar
+- Featured books horizontal scroll
+- All books 2-column grid
+- Tap any book → Book Detail
 
-billAmountText: String
-tipPercentage: Int
-numberOfPeople: Int
-Methods:
+### 2. Book Detail Screen
+- Large book cover (200x280)
+- Title, author, rating
+- Genre tag
+- Price
+- Description section
+- Quantity selector (1-10)
+- Add to Cart button
+- Success feedback (green checkmark)
 
-createCalculation() -> TipCalculation
-calculateTipAmount() -> Double
-calculateTotalAmount() -> Double
-calculatePerPersonAmount() -> Double
-reset()
-HistoryViewModel
+### 3. Cart Screen
+- "My Cart" title
+- Empty state with "Browse Books" button
+- Cart items list
+- Swipe to delete
+- Quantity stepper per item
+- Order summary card
+- Checkout button
+- Order confirmation alert
 
-Responsibilities:
+## 🎯 Key Highlights
 
-Manage calculation history
-Save/load from UserDefaults
-Delete calculations
-Clear all history
-Published Properties:
+✅ **No Placeholders**: Every function fully implemented  
+✅ **No TODOs**: Complete working code  
+✅ **No External Dependencies**: Pure SwiftUI  
+✅ **No Backend**: Static mock data only  
+✅ **MVVM Architecture**: Clean separation of concerns  
+✅ **Persistent Cart**: Survives app restarts  
+✅ **Real-time Search**: Instant filtering  
+✅ **Responsive UI**: Adapts to different screen sizes  
 
-calculations: [TipCalculation]
-Methods:
+## 📝 Code Quality
 
-saveCalculation(_ calculation: TipCalculation)
-deleteCalculation(at offsets: IndexSet)
-clearAll()
-🎨 Views
+- **SwiftUI Best Practices**: Modern declarative syntax
+- **MVVM Pattern**: Clear separation of business logic
+- **Computed Properties**: Efficient data transformation
+- **@Published Properties**: Reactive UI updates
+- **@EnvironmentObject**: Shared state management
+- **Codable Protocol**: Easy JSON serialization
 
-TipCalculatorView
+## 🧪 Testing
 
-Main calculator interface
-NavigationStack root
-Toolbar with history button
-Live calculation display
-Input validation
-SplitSummaryView
+### Manual Testing Checklist
+- [ ] Browse featured and all books
+- [ ] Search for books by title
+- [ ] Search for books by author
+- [ ] View book details
+- [ ] Adjust quantity (1-10)
+- [ ] Add book to cart
+- [ ] View cart badge update
+- [ ] Open cart
+- [ ] Update quantities in cart
+- [ ] Swipe to delete items
+- [ ] View order summary calculations
+- [ ] Complete checkout
+- [ ] Verify cart clears
+- [ ] Close and reopen app
+- [ ] Verify cart persistence
 
-Detailed breakdown display
-Save to history action
-Back navigation
-Success alert
-HistoryView
-
-List of saved calculations
-Swipe-to-delete
-Clear all with confirmation
-Empty state
-Navigation to detail view
-💾 Data Persistence
-
-UserDefaults
-
-Key: "tipCalculationHistory"
-Format: JSON encoded array
-Automatic save on changes
-Load on app launch
-Implementation
-
-// Save
-if let encoded = try? JSONEncoder().encode(calculations) {
-    userDefaults.set(encoded, forKey: historyKey)
-}
-
-// Load
-if let data = userDefaults.data(forKey: historyKey),
-   let decoded = try? JSONDecoder().decode([TipCalculation].self, from: data) {
-    calculations = decoded
-}
-🚀 Getting Started
-
-Requirements
-
-Xcode 14.0+
-iOS 16.0+
-Swift 5.9+
-Installation
-
-Create Xcode Project
-
-- Open Xcode
-- File → New → Project
-- iOS → App
-- Product Name: TipCalculator
-- Interface: SwiftUI
-- Language: Swift
-Add Files
-
-Copy all files from TipCalculator/ folder
-Drag into Xcode project
-Ensure all files are added to target
-Build and Run
-
-Select simulator (iPhone 14+)
-Press ⌘R to run
-📖 Usage
-
-Calculate a Tip
-
-Enter Bill Amount
-
-Tap the bill amount field
-Enter amount using numeric keyboard
-Select Tip Percentage
-
-Choose from 10%, 15%, 20%, or 25%
-Default is 15%
-Set Number of People
-
-Use stepper to adjust (1-20)
-Default is 1
-View Results
-
-Tip amount (blue)
-Total amount (green)
-Per person amount (purple)
-View Summary
-
-Tap "View Split Summary"
-See detailed breakdown
-Save to History
-
-Tap "Save to History" in summary
-Calculation saved with timestamp
-View History
-
-Access History
-
-Tap clock icon in toolbar
-View all saved calculations
-View Details
-
-Tap any calculation
-See full breakdown
-Delete Calculation
-
-Swipe left on item
-Tap delete
-Clear All
-
-Tap "Clear All" in toolbar
-Confirm deletion
-🎯 MVVM Benefits
-
-Separation of Concerns
-
-Model: Pure data structures
-ViewModel: Business logic only
-View: UI presentation only
-Testability
-
-ViewModels can be unit tested
-No UI dependencies in logic
-Mock data easy to create
-Maintainability
-
-Clear responsibility boundaries
-Easy to modify individual layers
-Scalable architecture
-🔄 Data Flow
-
-User Input
-    ↓
-View (TipCalculatorView)
-    ↓
-ViewModel (TipCalculatorViewModel)
-    ↓
-Model (TipCalculation)
-    ↓
-ViewModel (HistoryViewModel)
-    ↓
-UserDefaults
-    ↓
-View Updates (@Published)
-📱 Navigation Flow
-
-TipCalculatorView (Root)
-    ├→ SplitSummaryView
-    │   └→ Back to Calculator
-    │
-    └→ HistoryView
-        └→ HistoryDetailView
-            └→ Back to History
-🎨 UI Components
-
-Reusable Components
-
-ResultRow: Display calculation results
-SummaryRow: Display summary items
-HistoryRowView: History list item
-DetailRow: Detail view row
-Color Scheme
-
-Blue: Tip amount, primary actions
-Green: Total amount, success
-Purple: Per person amount
-Orange: Tip percentage
-Red: Delete actions
-Gray: Secondary elements
-🧪 Testing
-
-Manual Testing Checklist
-
-Calculator Screen:
-
- Enter bill amount
- Change tip percentage
- Adjust number of people
- Verify calculations are correct
- Test reset button
- Navigate to summary
- Navigate to history
-Summary Screen:
-
- Verify all values displayed
- Save to history
- Check success alert
- Navigate back
-History Screen:
-
- View saved calculations
- Swipe to delete
- Clear all with confirmation
- View empty state
- Tap for details
-Calculation Tests
-
-Bill: $100, Tip: 15%, People: 4
-Expected:
-- Tip: $15.00
-- Total: $115.00
-- Per Person: $28.75
-📊 Code Statistics
-
-Category	Files	Lines
-Models	1	~60
-ViewModels	2	~140
-Views	3	~660
-App Entry	1	~20
-Total	7	~880
-✨ Features Highlights
-
-Live Calculations
-
-Real-time updates as you type
-No "Calculate" button needed
-Instant feedback
-Smart Validation
-
-Disable summary button for invalid input
-Numeric keyboard for bill amount
-Constrained stepper range
-Persistent History
-
-Automatic save to UserDefaults
-Survives app restarts
-JSON encoding/decoding
-Clean UI
-
-Modern SwiftUI design
-SF Symbols icons
-Consistent spacing and colors
-Smooth animations
-🔮 Future Enhancements
+## 🔮 Future Enhancements
 
 Potential features for future versions:
+- User authentication
+- Backend API integration
+- Payment processing
+- Order history
+- Book reviews and ratings
+- Wishlist functionality
+- Push notifications
+- Dark mode optimization
+- iPad support with adaptive layouts
+- Accessibility improvements
 
- Custom tip percentages
- Tax calculation
- Multiple currency support
- Share calculation via text/email
- Dark mode optimization
- iPad support with split view
- Export history to CSV
- Tip calculator widget
- Siri shortcuts
- iCloud sync
-📝 Code Quality
+## 📄 License
 
-Best Practices
+This is a sample project for educational purposes.
 
-✅ Strict MVVM architecture
-✅ SwiftUI best practices
-✅ Computed properties for derived data
-✅ Proper use of @Published
-✅ NavigationStack for navigation
-✅ Reusable components
-✅ Clear naming conventions
-✅ Comprehensive comments
+## 👨‍💻 Author
 
-No External Dependencies
+Created as a complete SwiftUI eCommerce demonstration app.
 
-Pure SwiftUI
-Standard library only
-No third-party packages
-Easy to maintain
-🎓 Learning Points
+---
 
-This project demonstrates:
-
-MVVM architecture in SwiftUI
-UserDefaults persistence
-NavigationStack usage
-Codable protocol
-Computed properties
-@Published property wrappers
-List with swipe actions
-Alert dialogs
-Empty state views
-Preview providers
-📄 License
-
-This project is available for personal and educational use.
-
-👨‍💻 Author
-
-Created by Bob - AI Assistant
-Date: June 22, 2026
-
-Ready to calculate tips! 🧮💰
+**Built using SwiftUI**
